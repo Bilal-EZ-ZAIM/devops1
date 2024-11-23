@@ -15,13 +15,21 @@ jobs:
       - name: Pull Docker image
         run: sudo docker pull bilanox/devops1:latest
       
-      # الخطوة 2: حذف الحاوية القديمة إذا كانت موجودة
+      # الخطوة 2: تحرير المنفذ 5000 إذا كان قيد الاستخدام
+      - name: Free Port 5000 if in use
+        run: |
+          if sudo lsof -i :5000; then
+            echo "Port 5000 is in use. Freeing it..."
+            sudo kill -9 $(sudo lsof -t -i :5000)
+            echo "Port 5000 has been freed."
+          else
+            echo "Port 5000 is available."
+          fi
+      
+      # الخطوة 3: حذف الحاوية القديمة إذا كانت موجودة
       - name: Delete Old Docker Container
         run: |
-          # البحث عن الحاوية القديمة
           EXISTING_CONTAINER=$(sudo docker ps -a -q -f "name=devops1-container")
-          
-          # إذا كانت موجودة، يتم حذفها
           if [ -n "$EXISTING_CONTAINER" ]; then
             sudo docker rm -f devops1-container
             echo "Old container 'devops1-container' has been removed."
@@ -29,7 +37,7 @@ jobs:
             echo "No existing container found with the name 'devops1-container'."
           fi
 
-      # الخطوة 3: تشغيل الحاوية الجديدة
+      # الخطوة 4: تشغيل الحاوية الجديدة
       - name: Run New Docker Container
         run: |
           sudo docker run -d -p 5000:5000 --name devops1-container bilanox/devops1:latest
