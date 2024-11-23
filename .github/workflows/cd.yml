@@ -1,0 +1,19 @@
+name: CD Pipeline
+
+on:
+  workflow_run:
+    workflows: ["Node.js CI with Docker"]
+    types:
+      - completed
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+      - name: Pull Docker image
+        run: sudo docker pull bilanox/devopes1:latest
+      - name: Delete Old docker container
+        run: sudo docker rm -f devopes1 || true
+      - name: Run Docker Container
+        run: sudo docker run -d -p 5000:5000 --name devopes1-container bilanox/devopes1
