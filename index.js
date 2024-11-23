@@ -57,6 +57,18 @@ app.get("/newapi/products", (req, res) => {
   res.status(200).json(products);
 });
 
+app.get("/newapi/schools", (req, res) => {
+  const schools = [
+    { id: 1, name: "Hope School", location: "Rabat", students: 500 },
+    { id: 2, name: "Future School", location: "Casablanca", students: 750 },
+    { id: 3, name: "Success School", location: "Marrakech", students: 300 },
+    { id: 4, name: "Guidance School", location: "Tangier", students: 450 },
+    { id: 5, name: "Knowledge Academy", location: "Agadir", students: 600 },
+  ];
+
+  // Return the list of schools as a response
+  res.status(200).json(schools);
+});
 app.listen(5000, () => {
   console.log("Le serveur écoute sur le port 5000");
 });
