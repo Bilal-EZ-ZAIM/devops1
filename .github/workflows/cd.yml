@@ -11,27 +11,26 @@ jobs:
     runs-on: self-hosted
 
     steps:
+      # الخطوة 1: سحب أحدث إصدار من الصورة
       - name: Pull Docker image
         run: sudo docker pull bilanox/devops1:latest
-
-      # Delete Old Docker container dynamically if it exists
-      - name: Delete Old docker container (if exists)
+      
+      # الخطوة 2: حذف الحاوية القديمة إذا كانت موجودة
+      - name: Delete Old Docker Container
         run: |
-          CONTAINER_ID=$(sudo docker ps -a -q --filter ancestor=bilanox/devops1:latest)
-          if [ -n "$CONTAINER_ID" ]; then
-            sudo docker rm -f $CONTAINER_ID
-            echo "Old container removed: $CONTAINER_ID"
+          # البحث عن الحاوية القديمة
+          EXISTING_CONTAINER=$(sudo docker ps -a -q -f "name=devops1-container")
+          
+          # إذا كانت موجودة، يتم حذفها
+          if [ -n "$EXISTING_CONTAINER" ]; then
+            sudo docker rm -f devops1-container
+            echo "Old container 'devops1-container' has been removed."
           else
-            echo "No old container found"
+            echo "No existing container found with the name 'devops1-container'."
           fi
 
-      # Check if port 5000 is free, then run container
-      - name: Check Port Availability
+      # الخطوة 3: تشغيل الحاوية الجديدة
+      - name: Run New Docker Container
         run: |
-          if sudo lsof -i :5000; then
-            echo "Port 5000 is in use. Trying a different port."
-            sudo docker run -d -p 5001:5000 --name devops1-container bilanox/devops1:latest
-          else
-            echo "Port 5000 is available. Running the container."
-            sudo docker run -d -p 5000:5000 --name devops1-container bilanox/devops1:latest
-          fi
+          sudo docker run -d -p 5000:5000 --name devops1-container bilanox/devops1:latest
+          echo "New container 'devops1-container' has been created and is running."
