@@ -14,7 +14,7 @@ app.get("/api", (req, res) => {
   res.status(200).json(users);
 });
 
-app.get("/api/users", (req, res) => {
+app.get("/newapi/users", (req, res) => {
   const users = [
     { id: 1, name: "Alice", email: "alice@example.com" },
     { id: 2, name: "Bob", email: "bob@example.com" },
