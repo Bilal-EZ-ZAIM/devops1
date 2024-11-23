@@ -13,13 +13,11 @@ jobs:
     steps:
       - name: Pull Docker image
         run: sudo docker pull bilanox/devops1:latest
-      
+
       # Delete Old Docker container dynamically if it exists
       - name: Delete Old docker container (if exists)
         run: |
-          # Find the container ID of the old container based on the image name
           CONTAINER_ID=$(sudo docker ps -a -q --filter ancestor=bilanox/devops1:latest)
-          # If container exists, remove it
           if [ -n "$CONTAINER_ID" ]; then
             sudo docker rm -f $CONTAINER_ID
             echo "Old container removed: $CONTAINER_ID"
@@ -27,15 +25,13 @@ jobs:
             echo "No old container found"
           fi
 
-      # Run Docker Container
-      - name: Run Docker Container
+      # Check if port 5000 is free, then run container
+      - name: Check Port Availability
         run: |
-          # Check if the container with the same name exists and remove it
-          EXISTING_CONTAINER=$(sudo docker ps -a -q -f "name=devops1-container")
-          if [ -n "$EXISTING_CONTAINER" ]; then
-            sudo docker rm -f devops1-container
-            echo "Old container 'devops1-container' removed."
+          if sudo lsof -i :5000; then
+            echo "Port 5000 is in use. Trying a different port."
+            sudo docker run -d -p 5001:5000 --name devops1-container bilanox/devops1:latest
+          else
+            echo "Port 5000 is available. Running the container."
+            sudo docker run -d -p 5000:5000 --name devops1-container bilanox/devops1:latest
           fi
-
-          # Now, run the new container
-          sudo docker run -d -p 5000:5000 --name devops1-container bilanox/devops1:latest
