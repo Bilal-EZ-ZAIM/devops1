@@ -20,7 +20,7 @@ app.get("/newapi/users", (req, res) => {
   res.status(200).json(users);
 });
 
-app.get("/api/products", (req, res) => {
+app.get("/newapi/products", (req, res) => {
   const products = [
     {
       id: 1,
