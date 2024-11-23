@@ -12,8 +12,8 @@ jobs:
 
     steps:
       - name: Pull Docker image
-        run: sudo docker pull bilanox/devopes1:latest
+        run: sudo docker pull bilanox/devops1:latest
       - name: Delete Old docker container
-        run: sudo docker rm -f devopes1 || true
+        run: sudo docker rm -f devops1 || true
       - name: Run Docker Container
-        run: sudo docker run -d -p 5000:5000 --name devopes1-container bilanox/devopes1
+        run: sudo docker run -d -p 5000:5000 --name devops1-container bilanox/devops1
