@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 
-app.get("/newapi", (req, res) => {
+app.get("/newapi/", (req, res) => {
   res.send(
     "Bienvenue sur notre API ! Veuillez accéder aux différentes routes pour obtenir des informations."
   );
