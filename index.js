@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 
-app.get("/newapi/", (req, res) => {
+app.get("/newapi/home", (req, res) => {
   res.send(
     "Bienvenue sur notre API ! Veuillez accéder aux différentes routes pour obtenir des informations."
   );
@@ -9,7 +9,7 @@ app.get("/newapi/", (req, res) => {
 
 app.get("/newapi/users", (req, res) => {
   const users = [
-    { id: 1, name: "Alice", email: "alice@example.com" },
+    { id: 1, name: "bilanox", email: "bilanox@example.com" },
     { id: 2, name: "Bob", email: "bob@example.com" },
     { id: 3, name: "Charlie", email: "charlie@example.com" },
     { id: 4, name: "David", email: "david@example.com" },
