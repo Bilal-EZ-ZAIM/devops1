@@ -2,7 +2,7 @@ name: CD Pipeline
 
 on:
   workflow_run:
-    workflows: ["Node.js CI with Docker"]
+    workflows: ["CI Pipeline"]
     types:
       - completed
 
