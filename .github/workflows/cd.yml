@@ -13,7 +13,20 @@ jobs:
     steps:
       - name: Pull Docker image
         run: sudo docker pull bilanox/devops1:latest
-      - name: Delete Old docker container
-        run: sudo docker rm -f devops1 || true
+
+      # Dynamically remove old container based on the image name
+      - name: Delete Old docker container (if exists)
+        run: |
+          # Find the container ID of the old container based on the image name
+          CONTAINER_ID=$(sudo docker ps -a -q --filter ancestor=bilanox/devops1:latest)
+          # If container exists, remove it
+          if [ -n "$CONTAINER_ID" ]; then
+            sudo docker rm -f $CONTAINER_ID
+            echo "Old container removed: $CONTAINER_ID"
+          else
+            echo "No old container found"
+          fi
+
+      # Run Docker Container
       - name: Run Docker Container
-        run: sudo docker run -d -p 5000:5000 --name devops1-container bilanox/devops1
+        run: sudo docker run -d -p 5000:5000 --name devops1-container bilanox/devops1:latest
